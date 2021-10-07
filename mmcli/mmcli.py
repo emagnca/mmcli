@@ -1,4 +1,4 @@
-import cmd2, getpass, os, pprint
+import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
@@ -27,6 +27,18 @@ class MMCli(cmd2.Cmd):
         success = mmclient.login(email, password)
         if success: print('Login succeded')
         else: print('Login failed')
+
+    def do_reset_password(self, line):
+        email = input('   Email:')
+        success = mmclient.forgot_password(email)
+        if not success:
+            print('Failed to signal forgotten password')
+            return
+        password = getpass.getpass('Password:')
+        code = input('Code:')
+        success = mmclient.reset_password(email, password, code)
+        if success: print('Password reset')
+        else: print('Failed to reset password')
 
     def do_search(self, line):
         filter = input('Filter: ')
@@ -65,6 +77,25 @@ class MMCli(cmd2.Cmd):
         isOk, r = mmclient.upload(data, path, id)    
         print(isOk)
         print(r) 
+
+    """
+    curl -H "Content-Type: application/json" -d '{"directory":"/data/docs","doctype":"Faktura",
+    "documents":[{"file":"dummy.pdf","metadata":{"Fakturanr":"123456"}}]}' 
+    http://localhost:3001/documents
+    """
+    def do_batch(self, line):
+        documents = []
+        doctype = input('Document type: ')
+        directory = input('Source folder: ').strip()
+        print('Insert the documents, finish with an empty file name: ')
+        while True:
+            filename = input('Filename: ')
+            if not filename: break
+            metadata = input('Metadata: ')
+            documents.append({"file":filename, "metadata":json.dumps(metadata)})
+        o = {"doctype":doctype, "directory":directory, "documents":documents}
+        s = json.dumps(o)
+        print(s)
 
     def do_download(self, line):
         id = input('Documentid: ')

@@ -35,6 +35,23 @@ class MMClient:
             print(r.text)
             return False
 
+    def forgot_password(self, email):
+        r = requests.post(self.server + '/reset', json={"email": email})
+        if r.status_code==200:
+            return True
+        else:
+            print(r.text)
+            return False
+        
+    def reset_password(self, email, password, code):
+        r = requests.post(self.server + '/confirm', 
+            json={"email": email, "password": password, "code": code})
+        if r.status_code==200:
+            return True
+        else:
+            print(r.text)
+            return False  
+
     def types(self):
         return requests.get(self.server + '/types', headers={'Authorization': self.token})
 
