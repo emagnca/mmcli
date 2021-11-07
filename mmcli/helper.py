@@ -18,7 +18,7 @@ def help_general():
     print('Commands:')
     print('   audit - get audit logs for a document')
     print('   count - count documents')
-    print('download - download and show a document in the webbrowser')
+    print('download - download a document to file')
     print('  delete - deletes a document')
     print('   login - used to log in to the server')
     print('   metadata - used to log in to the server')
@@ -28,6 +28,7 @@ def help_general():
     print('    quit - exits the command loop')
     print("  update - updates document document's metadata")
     print('  upload - upload a document')
+    print('    view - show a document in the webbrowser')
     print()
     print("For detailed help for a command type: 'help <command>'")
 
@@ -43,6 +44,7 @@ def download():
     print('Download a document to the webbrowser')
     print('Paramameters:')
     print('  1. The document id')
+    print('  2. Path including file name to where to save to document')
 
 def delete():
     print('Downloads a document')

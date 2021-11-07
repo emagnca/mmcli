@@ -94,7 +94,17 @@ class MMClient:
 
             return True, id
 
-    def download(self, id):
+    def download(self, id, path):
+        url = self.server + '/document/' + id + '?isAttachment=true'
+        response = requests.get(url, headers={'Authorization': self.token})
+        if not response.ok:
+            return False, ('Get document failed. Reason: ' +
+                  response.reason + '. Text:' + response.text)
+        response = requests.get(response.json()['url'])
+        open(path, "wb").write(response.content)
+        return True, "OK"
+
+    def view(self, id):
         url = self.server + '/document/' + id
         response = requests.get(url, headers={'Authorization': self.token})
         if not response.ok:

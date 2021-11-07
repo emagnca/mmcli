@@ -97,9 +97,15 @@ class MMCli(cmd2.Cmd):
         s = json.dumps(o)
         print(s)
 
+    def do_view(self, line):
+        id = input('Documentid: ')
+        isOk, r = mmclient.view(id)
+        if not isOk: print(r)
+
     def do_download(self, line):
         id = input('Documentid: ')
-        isOk, r = mmclient.download(id)
+        path = input('Path: ')
+        isOk, r = mmclient.download(id, path)
         if not isOk: print(r)
 
     def do_metadata(self, line):
