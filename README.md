@@ -4,25 +4,26 @@ It can run serverless, in a container or locally with the same code base. MMCli 
 
 <h2>Getting started with the cli</h2>
 
-With Python3 installed:
+With Python3 installed run the following command on the command prompt:
 
-$ python -c "from mmcli import mmcli; mmcli.run()"<br><br>
+$ <b> python -c "from mmcli import mmcli; mmcli.run()" </b><br><br>
 
 (Cmd) help<br><br>
-Commands:<br> 
+Commands:<br>
    <table>
-   <tr><td><b>audit</b></td><td>-</td><td><i>print audit logs for a document</i></td></tr>
-   <tr><td><b>count</b></td><td>-</td><td><i>count documents</i></td></tr>
-   <tr><td><b>download</b></td><td>-</td><td><i>download and show a document in the webbrowser</i></td></tr>
-   <tr><td><b>delete</b></td><td>-</td><td><i>deletes a document</i></td></tr>
-   <tr><td><b>login</b></td><td>-</td><td><i>used to log in to the server</i></td></tr>
-   <tr><td><b>metadata</b></td><td>-</td><td><i>prints metadata for a document</i></td></tr>
-   <tr><td><b>register</b></td><td>-</td><td><i>register a user</i></td></tr>
-   <tr><td><b>search</b></td><td>-</td><td><i>search documents</i></td></tr>
-   <tr><td><b>server</b></td><td>-</td><td><i>change target server from the default</i></td></tr>
-   <tr><td><b>types</b></td><td>-</td><td><i>lists available document types</i></td></tr>
-   <tr><td><b>update</b></td><td>-</td><td><i>updates a document's metadata</i></td></tr>
-   <tr><td><b>upload</b></td><td>-</td><td><i>upload either a new document or a new version</i></td></tr>
+   <tr><td><b>audit</b></td><td><i>print audit logs for a document</i></td></tr>
+   <tr><td><b>count</b></td><td><i>count documents</i></td></tr>
+   <tr><td><b>download</b></td><td><i>download a document to file</i></td></tr>
+   <tr><td><b>delete</b></td><td><i>deletes a document</i></td></tr>
+   <tr><td><b>login</b></td><td><i>used to log in to the server</i></td></tr>
+   <tr><td><b>metadata</b></td><td><i>prints metadata for a document</i></td></tr>
+   <tr><td><b>register</b></td><td><i>register a user</i></td></tr>
+   <tr><td><b>search</b></td><td><i>search documents</i></td></tr>
+   <tr><td><b>server</b></td><td><i>change target server from the default</i></td></tr>
+   <tr><td><b>types</b></td><td><i>lists available document types</i></td></tr>
+   <tr><td><b>update</b></td><td><i>updates a document's metadata</i></td></tr>
+   <tr><td><b>upload</b></td><td><i>upload either a new document or a new version</i></td></tr>
+   <tr><td><b>view</b></td><td><i>download and show a document in the webbrowser</i></td></tr>
 </table>
 
 For detailed help for a command type: 'help <command>'<br><br>
@@ -134,7 +135,7 @@ admin operations will be available via an api and cli.
 
 <h3>Notifications</h3>
 Notifications can be received upon document creation or deletion. For an example this can be look at 
-this link: <a href="https://master.d8z78xbyyxmus.amplifyapp.com/notification.html">notification client</a>
+this link: <a href="https://mmdok.se/notification.html">notification client</a>
 The client takes the url parameter ?group=<i>group_name</i>, where the <i>group_name</i> is the name of your group. 
 
 <h3>Server side</h3>
@@ -144,7 +145,7 @@ againt a server running in a Docker container.
 
 <h3>Other clients</h3>
 MMDok can be accessed via a REST API. MMCli contains a Python client using this api.<br>
-There is a gui client available at <a href="https://master.d8z78xbyyxmus.amplifyapp.com/">gui client</a>. The same login will work.
+There is a gui client available at <a href="https://mmdok.se/">gui client</a>. The same login will work.
 
 <h3>Administration</h3>
 Administrations of documenttypes, users and their permissions can be done via an admin gui (a proper api will come). Two screens
