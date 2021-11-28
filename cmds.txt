@@ -1,4 +1,4 @@
-python setup.py bdist_wheel
+python3 setup.py bdist_wheel
 
 PYPI_TEST
 twine upload --repository-url https://test.pypi.org/legacy/ dist/*
