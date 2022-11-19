@@ -21,7 +21,7 @@ def help_general():
     print('download - download a document to file')
     print('  delete - deletes a document')
     print('   login - used to log in to the server')
-    print('   metadata - used to log in to the server')
+    print('metadata - used to log in to the server')
     print('register - register a user')
     print('  search - search documents')
     print('   types - prints available document types')

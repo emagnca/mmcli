@@ -2,12 +2,17 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod')
+mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod',
+                    'https://hzfhh2moki.execute-api.eu-north-1.amazonaws.com/dev')
 
 class MMCli(cmd2.Cmd):
     def do_server(self, line):
         server = input('Server:')
         mmclient.set_server(server)
+
+    def do_login_server(self, line):
+        server = input('Login server:')
+        mmclient.set_login_server(server)
 
     def do_register(self, line):
         email = input('   Email:')
@@ -20,9 +25,8 @@ class MMCli(cmd2.Cmd):
         else: print('Registration failed')
         
     def do_login(self, line):
-        email = input('   Email:')
-        password = getpass.getpass('Password:')
-        success = mmclient.login(email, password)
+        ssn = input('   Ssn:')
+        success = mmclient.login_bankid(ssn)
         if success: print('Login succeded')
         else: print('Login failed')
 
@@ -69,7 +73,6 @@ class MMCli(cmd2.Cmd):
         path = input('Path to files: ').strip()
         data['metadata'] = metadata
         data['filename'] = os.path.basename(path)
-        data['mimetype'] = 'application/pdf'
         data['doctype'] = doctype
         print(data)
         isOk, r = mmclient.upload(data, path, id)    
@@ -126,6 +129,18 @@ class MMCli(cmd2.Cmd):
         id = input('Documentid: ')
         rsp = mmclient.delete(id)
         print(rsp.content)  
+
+    def do_newtype(self, line):
+        name = input('name: ')
+        rsp = mmclient.create_doctype(name)
+        print(rsp.content)
+
+    def do_newfield(self, line):
+        name = input('name: ')
+        doctype = input('doctype: ')
+        datatype = input('type [text|number]: ')
+        rsp = mmclient.create_field(name, doctype, datatype)
+        print(rsp.content)
 
     def do_help(self, line):
         help(line)

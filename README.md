@@ -151,7 +151,7 @@ There is a gui client available at <a href="https://mmdok.se/">gui client</a>. T
 Administrations of documenttypes, users and their permissions can be done via an admin gui (a proper api will come). Two screens
 from the gui is show below. Please contact us if you want to create a group.
 <h4>The main screen</h4>
-<img src="https://master.d8z78xbyyxmus.amplifyapp.com/images/admin_main.png" alt="Bilden hittades inte" width="800" height="450">
+<img src="https://mmdok.se/images/admin_main.png" alt="Bilden hittades inte" width="800" height="450">
 <h4>Screen for defining fields</h4>
-<img src="https://master.d8z78xbyyxmus.amplifyapp.com/images/admin_field.png" alt="Bilden hittades inte" width="800" height="450">
+<img src="https://mmdok.se/images/admin_field.png" alt="Bilden hittades inte" width="800" height="450">
 

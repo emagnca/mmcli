@@ -2,11 +2,11 @@ from setuptools import setup
 
 setup(
     name='mmdok-cli',
-    version='0.46',    
+    version='0.50',    
     description='Cli client for mmdok',
     url='https://github.com/emagnca/mmcli',
-    author='Magnus Carlhammar',
-    author_email='mcarlhammar@gmail.com',
+    author='emagnca',
+    author_email='info@mmdok.se',
     license='BSD 2-clause',
     packages=['mmcli'],
     install_requires=['cmd2==1.5.0',

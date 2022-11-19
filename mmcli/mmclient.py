@@ -1,17 +1,21 @@
 
-import json
+import mimetypes
 import requests
 import pprint
 import urllib
 import webbrowser
 
 class MMClient:
-    def __init__(self, server):
+    def __init__(self, server, login_server):
         self.server = server
+        self.login_server = login_server
         self.token = 'No token'
 
     def set_server(self, server):
         self.server = server
+
+    def set_login_server(self, login_server):
+        self.login_server = login_server
 
     def register(self, email, password, hasCompany):
         r = requests.post(self.server + '/register', 
@@ -22,8 +26,24 @@ class MMClient:
         else:
             print(r.text)
             return False
+
+    def login_bankid(self, ssn):
+        r = requests.post(self.login_server + '/login', json={"ssn": ssn})
+        j = r.json()
+        if 'token' in j:
+            self.token = j['token']
+            if 'company' in j: 
+                print("Company: " + j['company'])
+            return True
+        else:
+            print(r.text)
+            return False
+
+    def logout_bankid(self):
+        return requests.post(self.login_server + '/logout', headers={'Authorization': self.token})            
+
             
-    def login(self, email, password):
+    def login_usr_pwd(self, email, password):
         r = requests.post(self.server + '/login', json={"email": email, "password": password})
         j = r.json()
         if 'token' in j:
@@ -73,6 +93,8 @@ class MMClient:
         return requests.get(self.server + '/documents?' + params, headers={'Authorization': self.token})
 
     def upload(self, data, path, id):
+        mimetype = self.get_mimetype(path)
+        data['mimetype'] = mimetype 
         url = self.server + '/document'
         if id: url += '/' + id
         response = requests.post(url, data=data, headers={'Authorization': self.token})
@@ -84,9 +106,9 @@ class MMClient:
         fields = response['fields']
         id = response['id']
         with open(path, 'rb') as f:
-            files = {'file': (path, f, 'applicaion/pdf'),
+            files = {'file': (path, f, mimetype),
                  'Content-Disposition': 'form-data; name="files"',
-                 'Content-Type': 'application/pdf'}
+                 'Content-Type': mimetype}
             response = requests.post(url, files=files, data=fields)
             if not response.ok:
                 return False, ('Failed upload to Minio. Reason: ' +
@@ -147,6 +169,25 @@ class MMClient:
     def count(self):
         url = self.server + '/count'
         return requests.get(url, headers={'Authorization': self.token})
+
+    def create_doctype(self, name):
+        url = self.server + '/type'
+        data = {}
+        data['name'] = name
+        return requests.post(url, json=data, headers={'Authorization': self.token})
+
+    def create_field(self, name, doctype, datatype):
+        url = self.server + '/field'
+        data = {}
+        data['name'] = name
+        data['doctype'] = doctype
+        data['datatype'] = datatype
+        return requests.post(url, json=data, headers={'Authorization': self.token})
+
+
+    def get_mimetype(self, path):
+        mimetype = mimetypes.guess_type(path)
+        return mimetype[0] if len(mimetype)>0 else 'application/octet-stream'
 
     def dump(self, response):
         print(response.request.method)
