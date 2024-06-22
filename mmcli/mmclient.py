@@ -1,7 +1,7 @@
-
 import mimetypes
-import requests
 import pprint
+import requests
+import time
 import urllib
 import webbrowser
 
@@ -9,71 +9,139 @@ class MMClient:
     def __init__(self, server, login_server):
         self.server = server
         self.login_server = login_server
-        self.token = 'No token'
+        self.refresh_token = 'No token'
+        self.access_token = 'No token'
 
     def set_server(self, server):
         self.server = server
 
     def set_login_server(self, login_server):
         self.login_server = login_server
-
-    def register(self, email, password, hasCompany):
-        r = requests.post(self.server + '/register', 
-            json={"email": email, "password": password, "hasCompany":hasCompany})
-
-        if r.status_code==200:
-            return True
-        else:
-            print(r.text)
-            return False
-
-    def login_bankid(self, ssn):
-        r = requests.post(self.login_server + '/login', json={"ssn": ssn})
-        j = r.json()
-        if 'token' in j:
-            self.token = j['token']
+        
+    def _login(self, response):
+        #headers = response.headers
+        if response.status_code == 200:
+            j = response.json()
+            self.access_token = j['tokens']['access_token']
+            self.refresh_token = j['tokens']['refresh_token']
+            print("AccessToken:" + self.access_token)
+            print("RefreshToken:" + self.refresh_token) 
             if 'company' in j: 
-                print("Company: " + j['company'])
+                self.company = j['company']
             return True
         else:
-            print(r.text)
-            return False
-
-    def logout_bankid(self):
-        return requests.post(self.login_server + '/logout', headers={'Authorization': self.token})            
-
-            
-    def login_usr_pwd(self, email, password):
-        r = requests.post(self.server + '/login', json={"email": email, "password": password})
-        j = r.json()
-        if 'token' in j:
-            self.token = j['token']
-            if 'company' in j: 
-                print("Company: " + j['company'])
-            return True
-        else:
-            print(r.text)
-            return False
-
-    def forgot_password(self, email):
-        r = requests.post(self.server + '/reset', json={"email": email})
-        if r.status_code==200:
-            return True
-        else:
-            print(r.text)
+            print(response.text)
             return False
         
-    def reset_password(self, email, password, code):
-        r = requests.post(self.server + '/confirm', 
-            json={"email": email, "password": password, "code": code})
-        if r.status_code==200:
-            return True
+    def _refresh(self):
+        response = requests.post(self.login_server + '/refresh', 
+                          headers={'Authorization': 'Bearer ' + self.refresh_token})
+        if response.status_code == 200:
+            j = response.json()
+            self.access_token = j['tokens']['access_token']
+            self.refresh_token = j['tokens']['refresh_token']
         else:
-            print(r.text)
-            return False  
+            print("Could not refresh" + str(response.status_code))
+        
+    def _send_get(self, url, resend=True):
+        response = requests.get(url, headers={'Authorization': 'Bearer ' + self.access_token})
+        if response.status_code==401 and resend:
+            self._refresh()
+            return self._send_get(url, False)
+        else:
+            return response
+
+    def _send_post(self, url, data={}, resend=True):
+        response = requests.post(url, data=data, 
+                                 headers={'Authorization': 'Bearer ' + self.access_token})
+        if response.status_code==401 and resend:
+            self._refresh()
+            return self._send_post(url, data, False)
+        else:
+            return response
+        
+    def _send_put(self, url, data={}, resend=True):
+        response = requests.put(url, json=data, 
+                                headers={'Authorization': 'Bearer ' + self.access_token})
+        if response.status_code==401 and resend:
+            self._refresh()
+            return self._send_post(url, data, False)
+        else:
+            return response
+        
+    def _send_delete(self, url, resend=True):
+        response = requests.delete(url,
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
+        if response.status_code==401 and resend:
+            self._refresh()
+            return self._send_delete(url, False)
+        else:
+            return response
+        
+    def register(self):
+        webbrowser.open(self.login_server + '/register')
+            
+    def login_bankid(self, ssn):
+        response = requests.post(self.login_server + '/login', json={"ssn": ssn, "type":"bankid"})
+        return self._login(response)
+
+    def login_freja(self, ssn):
+        response = requests.post(self.login_server + '/login', json={"email": ssn, "type":"freja"})
+        j = response.json()
+        if response.status_code == 202:
+            return self._poll(ssn, "freja", j['token'])
+        else:
+            return False
+        
+    def _poll(self, email, type, token):
+        url = self.login_server + '/poll'
+        time.sleep(1)
+        print(url)
+        response = requests.post(url, json={"email": email, "type": type}, 
+                                 headers={"Authorization": "Bearer " + token})
+        j = response.json()
+        if response.status_code == 202:
+            new_token = j['token']
+            return self._poll(email, type, new_token)
+        elif response.status_code == 200:
+            return self._login(response)
+        else:
+            return False
+          
+    def login_usrpwd(self, email, password, code):
+        response = requests.post(self.login_server + '/login', json={"email": email, 
+                                                               "password": password, 
+                                                               "code": code,
+                                                               "type": "password"})
+        return self._login(response)
+    
+    def login_apikey(self, email, apikey):
+        response = requests.post(self.login_server + '/login', json={"type": "apikey", 
+                                                                     "email": email, 
+                                                                     "apikey": apikey})
+        return self._login(response)
+    
+    def logout(self):
+        url = self.login_server + '/logout'
+        response = requests.post(url,  
+                                 headers={'Authorization': 'Bearer ' + self.refresh_token})
+        return response.status_code == 200
+        
+        
+    def test_auth(self):
+        r = self._send_get(self.login_server + '/private')
+        if r.status_code==200:
+            j = r.json()
+            if 'email' in j:
+                email = j['email']
+                return True, email
+            else:
+                return False, "Could not identify user"
+        else:
+            return False, "Not permitted"
 
     def types(self):
-        return requests.get(self.server + '/types', headers={'Authorization': self.token})
+        return self._send_get(self.server + '/types')
 
     """
     Example:
@@ -90,21 +158,20 @@ class MMClient:
             range = {}
         params = urllib.parse.urlencode({'filter': filter, 'sort': sort, 'range': range}) # json(), status_code
         print(params)
-        return requests.get(self.server + '/documents?' + params, headers={'Authorization': self.token})
+        return self._send_get(self.server + '/documents?' + params)                
 
     def upload(self, data, path, id):
-        mimetype = self.get_mimetype(path)
-        data['mimetype'] = mimetype 
         url = self.server + '/document'
         if id: url += '/' + id
-        response = requests.post(url, data=data, headers={'Authorization': self.token})
-        #self.dump(response)
+        response = self._send_post(url, data=data)
         response = response.json()
         if 'url' not in response: 
             return False, response
         url = response['url']
         fields = response['fields']
         id = response['id']
+        mimetype = mimetypes.guess_type(path)
+        if len(mimetype)<0: mimetype='application/octet-stream' 
         with open(path, 'rb') as f:
             files = {'file': (path, f, mimetype),
                  'Content-Disposition': 'form-data; name="files"',
@@ -116,9 +183,10 @@ class MMClient:
 
             return True, id
 
-    def download(self, id, path):
+    def download(self, id, path, pdf):
         url = self.server + '/document/' + id + '?isAttachment=true'
-        response = requests.get(url, headers={'Authorization': self.token})
+        if (pdf): url += '&pdf=true'
+        response = self._send_get(url)
         if not response.ok:
             return False, ('Get document failed. Reason: ' +
                   response.reason + '. Text:' + response.text)
@@ -126,9 +194,11 @@ class MMClient:
         open(path, "wb").write(response.content)
         return True, "OK"
 
-    def view(self, id):
+    def view(self, id, version=None):
         url = self.server + '/document/' + id
-        response = requests.get(url, headers={'Authorization': self.token})
+        if version: 
+            url += '?version=' + version
+        response = self._send_get(url)
         if not response.ok:
             return False, ('Get document failed. Reason: ' +
                   response.reason + '. Text:' + response.text)
@@ -137,7 +207,7 @@ class MMClient:
 
     def metadata(self, id):
         url = self.server + '/document/' + id + '?type=metadata'
-        response = requests.get(url, headers={'Authorization': self.token})
+        response = self._send_get(url)
         if not response.ok:
             return False, ('Get metadata failed. Reason: ' +
                   response.reason + '. Text:' + response.text)
@@ -146,7 +216,7 @@ class MMClient:
 
     def audit(self, id):
         url = self.server + '/document/' + id + '?type=audit'
-        response = requests.get(url, headers={'Authorization': self.token})
+        response = self._send_get(url)
         if not response.ok:
             return False, ('Get audits failed. Reason: ' +
                   response.reason + '. Text:' + response.text)
@@ -156,38 +226,21 @@ class MMClient:
     def update(self, id, metadata):
         data = {}
         data['metadata'] = metadata
-        rsp = requests.put(self.server + "/document/" + id, json=data, headers={'Authorization': self.token});
-        #self.dump(rsp)
+        rsp = self._send_put(self.server + "/document/" + id, json=data)
         return rsp
 
-    def delete(self, id):
-        data = {}
-        data['id'] = id
-        rsp = requests.delete(self.server + "/document/" + id,headers={'Authorization': self.token})
+    def delete(self, id, isFullDelete):
+        url = self.server
+        if isFullDelete: url += "/document/"
+        else: url += "/version/"
+        url += id
+        print(url) 
+        rsp = self._send_delete(url)
         return rsp
 
     def count(self):
         url = self.server + '/count'
-        return requests.get(url, headers={'Authorization': self.token})
-
-    def create_doctype(self, name):
-        url = self.server + '/type'
-        data = {}
-        data['name'] = name
-        return requests.post(url, json=data, headers={'Authorization': self.token})
-
-    def create_field(self, name, doctype, datatype):
-        url = self.server + '/field'
-        data = {}
-        data['name'] = name
-        data['doctype'] = doctype
-        data['datatype'] = datatype
-        return requests.post(url, json=data, headers={'Authorization': self.token})
-
-
-    def get_mimetype(self, path):
-        mimetype = mimetypes.guess_type(path)
-        return mimetype[0] if len(mimetype)>0 else 'application/octet-stream'
+        return self._send_get(url)
 
     def dump(self, response):
         print(response.request.method)

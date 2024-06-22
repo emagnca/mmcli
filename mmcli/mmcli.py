@@ -2,10 +2,15 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod',
-                    'https://hzfhh2moki.execute-api.eu-north-1.amazonaws.com/dev')
+mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
+#mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
+#                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
 
 class MMCli(cmd2.Cmd):
+
+    def do_exit(self,*args):
+        return True
+
     def do_server(self, line):
         server = input('Server:')
         mmclient.set_server(server)
@@ -15,23 +20,46 @@ class MMCli(cmd2.Cmd):
         mmclient.set_login_server(server)
 
     def do_register(self, line):
-        email = input('   Email:')
-        password = getpass.getpass('Password:')
-        hasGroup = None
-        while hasGroup!='Y' and hasGroup!='N':
-            hasGroup = input('Belong to a group[Y|N]:')
-        success = mmclient.register(email, password, hasGroup=='Y')
-        if success: print('Registration succeded. An email will be sent to you for confirmation.')
-        else: print('Registration failed')
-        
+        mmclient.register()
+
     def do_login(self, line):
-        ssn = input('   Ssn:')
-        success = mmclient.login_bankid(ssn)
+        tried_login = False
+        success = False
+        while (not tried_login):
+            type = input('bankid|freja|apikey|user-password: ')
+            tried_login = type in 'bfau'
+            if (type.startswith('b')):
+                ssn = input('     Ssn: ')
+                success = mmclient.login_bankid(ssn)
+            elif (type.startswith('f')):
+                ssn = input('     Email: ')
+                success = mmclient.login_freja(ssn)
+            elif (type.startswith('a')):
+                email = input('     Email: ')
+                key = input('    Apikey: ')
+                success = mmclient.login_apikey(email, key)
+            elif (type.startswith('u')):
+                user = input('   Email: ')
+                pwd = getpass.getpass('Password: ')
+                code = input('    Code: ')
+                success = mmclient.login_usrpwd(user, pwd, code)
         if success: print('Login succeded')
         else: print('Login failed')
 
+    def do_logout(self, line):
+        success = mmclient.logout()
+        if success: print('Logout succeded')
+        else: print('Logout failed')
+
+    def do_test_login(self, line):
+        success, message = mmclient.test_auth()
+        if success:
+            print("Accessed protected resource as: " + message)
+        else:
+            print("Failed to access protected resource. Reason: " + message)
+
     def do_reset_password(self, line):
-        email = input('   Email:')
+        email = input('   Email2:')
         success = mmclient.forgot_password(email)
         if not success:
             print('Failed to signal forgotten password')
@@ -66,14 +94,18 @@ class MMCli(cmd2.Cmd):
 
     def do_upload(self, line):
         print('Provide a document id if it is a new version, leave empty for new document')
+        doctype = None
         id = input('Docid: ')
-        doctype = input('Välj dokumenttyp: ')
+        if not id:
+            doctype = input('Välj dokumenttyp: ')
         data = {}
         metadata = input('Metadata: ')
         path = input('Path to files: ').strip()
         data['metadata'] = metadata
         data['filename'] = os.path.basename(path)
-        data['doctype'] = doctype
+        data['mimetype'] = 'application/pdf'
+        if doctype:
+            data['doctype'] = doctype
         print(data)
         isOk, r = mmclient.upload(data, path, id)    
         print(isOk)
@@ -103,10 +135,17 @@ class MMCli(cmd2.Cmd):
         isOk, r = mmclient.view(id)
         if not isOk: print(r)
 
+    def do_view_version(self, line):
+        id = input('Documentid: ')
+        version = input('Version: ')
+        isOk, r = mmclient.view(id, version)
+        if not isOk: print(r)
+
     def do_download(self, line):
         id = input('Documentid: ')
-        path = input('Path: ')
-        isOk, r = mmclient.download(id, path)
+        path = input('Path:' ) 
+        pdf = path.lower().endswith('pdf')
+        isOk, r = mmclient.download(id, path, pdf)
         if not isOk: print(r)
 
     def do_metadata(self, line):
@@ -127,20 +166,13 @@ class MMCli(cmd2.Cmd):
 
     def do_delete(self, line):
         id = input('Documentid: ')
-        rsp = mmclient.delete(id)
+        rsp = mmclient.delete(id, True)
         print(rsp.content)  
 
-    def do_newtype(self, line):
-        name = input('name: ')
-        rsp = mmclient.create_doctype(name)
-        print(rsp.content)
-
-    def do_newfield(self, line):
-        name = input('name: ')
-        doctype = input('doctype: ')
-        datatype = input('type [text|number]: ')
-        rsp = mmclient.create_field(name, doctype, datatype)
-        print(rsp.content)
+    def do_delete_version(self, line):
+        id = input('Documentid: ')
+        rsp = mmclient.delete(id, False)
+        print(rsp.content) 
 
     def do_help(self, line):
         help(line)

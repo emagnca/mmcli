@@ -18,10 +18,10 @@ def help_general():
     print('Commands:')
     print('   audit - get audit logs for a document')
     print('   count - count documents')
-    print('download - download a document to file')
+    print('download - download and show a document to file')
     print('  delete - deletes a document')
     print('   login - used to log in to the server')
-    print('metadata - used to log in to the server')
+    print('   metadata - used to log in to the server')
     print('register - register a user')
     print('  search - search documents')
     print('   types - prints available document types')
@@ -44,7 +44,6 @@ def download():
     print('Download a document to the webbrowser')
     print('Paramameters:')
     print('  1. The document id')
-    print('  2. Path including file name to where to save to document')
 
 def delete():
     print('Downloads a document')
