@@ -226,7 +226,23 @@ class MMClient:
     def update(self, id, metadata):
         data = {}
         data['metadata'] = metadata
-        rsp = self._send_put(self.server + "/document/" + id, json=data)
+        rsp = self._send_put(self.server + "/document/" + id, data)
+        return rsp
+    
+    def link(self, id, ref):
+        data = {}
+        data['ref'] = ref
+        rsp = self._send_put(self.server + "/document/link/" + id, data)
+        return rsp
+
+    def unlink(self, id, ref):
+        data = {}
+        data['ref'] = ref
+        rsp = self._send_put(self.server + "/document/unlink/" + id, data)
+        return rsp
+
+    def list(self, id):
+        rsp = self._send_get(self.server + "/document/link/" + id)
         return rsp
 
     def delete(self, id, isFullDelete):

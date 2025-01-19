@@ -2,9 +2,9 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-#mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
-mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
-                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
+mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
+#mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
+#                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
 
 class MMCli(cmd2.Cmd):
 
@@ -62,7 +62,7 @@ class MMCli(cmd2.Cmd):
         email = input('   Email2:')
         success = mmclient.forgot_password(email)
         if not success:
-            print('Failed to signal forgotten password')
+            print('Failed to reset password')
             return
         password = getpass.getpass('Password:')
         code = input('Code:')
@@ -83,6 +83,23 @@ class MMCli(cmd2.Cmd):
         #range = '{"from":0, "to":3}'
         r = mmclient.search(filter, sort, range) #{"doctype":"kunddokument", "kundnummer":"AAA141414"}
         pprint.pprint(r.json())
+
+    def do_link(self, line):
+        id = input('Source: ')
+        ref = input('Target: ')
+        rsp = mmclient.link(id, ref)
+        print(rsp.json)
+
+    def do_unlink(self, line):
+        id = input('Source: ')
+        ref = input('Target: ')
+        rsp = mmclient.unlink(id, ref)
+        print(rsp.json)
+
+    def do_list(self, line):
+        id = input('Source: ')
+        rsp = mmclient.list(id)
+        print(rsp.json)
 
     def do_count(self, line):
         r = mmclient.count()
