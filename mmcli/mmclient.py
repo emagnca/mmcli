@@ -244,6 +244,18 @@ class MMClient:
     def list(self, id):
         rsp = self._send_get(self.server + "/document/link/" + id)
         return rsp
+    
+    def lock(self, id):
+        rsp = self._send_put(self.server + "/document/lock/" + id)
+        return rsp
+
+    def unlock(self, id):
+        rsp = self._send_put(self.server + "/document/unlock/" + id)
+        return rsp
+    
+    def getlock(self, id):
+        rsp = self._send_get(self.server + "/document/lock/" + id)
+        return rsp
 
     def delete(self, id, isFullDelete):
         url = self.server

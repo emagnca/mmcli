@@ -2,9 +2,9 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
-#mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
-#                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
+#mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
+mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
+                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
 
 class MMCli(cmd2.Cmd):
 
@@ -88,18 +88,33 @@ class MMCli(cmd2.Cmd):
         id = input('Source: ')
         ref = input('Target: ')
         rsp = mmclient.link(id, ref)
-        print(rsp.json)
+        print(rsp.text)
 
     def do_unlink(self, line):
         id = input('Source: ')
         ref = input('Target: ')
         rsp = mmclient.unlink(id, ref)
-        print(rsp.json)
+        print(rsp.text)
 
     def do_list(self, line):
         id = input('Source: ')
         rsp = mmclient.list(id)
-        print(rsp.json)
+        print(rsp.text)
+
+    def do_lock(self, line):
+        id = input('Id: ')
+        rsp = mmclient.lock(id)
+        print(rsp.text)
+
+    def do_unlock(self, line):
+        id = input('Id: ')
+        rsp = mmclient.unlock(id)
+        print(rsp.text)
+
+    def do_getlock(self, line):
+        id = input('Id: ')
+        rsp = mmclient.getlock(id)
+        print(rsp.text)
 
     def do_count(self, line):
         r = mmclient.count()
