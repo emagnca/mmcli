@@ -190,6 +190,26 @@ class MMCli(cmd2.Cmd):
         isOk, r = mmclient.audit(id)
         if not isOk: print(r)
 
+    def do_users(self, line):
+        rsp = mmclient.users()
+        print(rsp.content)
+
+    def do_getprofile(self, line):
+        r = mmclient.get_profile()
+        print(r)
+
+    def do_setprofile(self, line):
+        profiles = input('Profiles:' )
+        data = [profiles]
+        isOk, r = mmclient.set_profile(data)
+        if not isOk: print(r)
+
+    def do_updateprofile(self, line):
+        profiles = input('Profiles:' )
+        data = [profiles]
+        isOk, r = mmclient.update_profile(data)
+        if not isOk: print(r)
+
     def do_update(self, line):
         id = input('Documentid: ')
         metadata = input('Metadata: ')

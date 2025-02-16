@@ -52,7 +52,7 @@ class MMClient:
             return response
 
     def _send_post(self, url, data={}, resend=True):
-        response = requests.post(url, data=data, 
+        response = requests.post(url, json=data, 
                                  headers={'Authorization': 'Bearer ' + self.access_token})
         if response.status_code==401 and resend:
             self._refresh()
@@ -65,7 +65,7 @@ class MMClient:
                                 headers={'Authorization': 'Bearer ' + self.access_token})
         if response.status_code==401 and resend:
             self._refresh()
-            return self._send_post(url, data, False)
+            return self._send_put(url, data, False)
         else:
             return response
         
@@ -256,6 +256,26 @@ class MMClient:
     def getlock(self, id):
         rsp = self._send_get(self.server + "/document/lock/" + id)
         return rsp
+    
+    def users(self):
+        rsp = self._send_get(self.server + "/users")
+        return rsp
+    
+    def get_profile(self):
+        rsp = self._send_get(self.server + '/user/profile')
+        return rsp.text
+        
+    def set_profile(self, profiles):
+        rsp = self._send_post(self.server + '/user/profile', data=profiles)
+        if not rsp.ok:
+            return False, rsp.text
+        return True, "Saved profile"
+    
+    def update_profile(self, profiles):
+        rsp = self._send_put(self.server + '/user/profile', data=profiles)
+        if not rsp.ok:
+            return False, rsp.text
+        return True, "Saved profile"
 
     def delete(self, id, isFullDelete):
         url = self.server
