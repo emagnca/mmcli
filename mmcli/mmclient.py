@@ -158,7 +158,12 @@ class MMClient:
             range = {}
         params = urllib.parse.urlencode({'filter': filter, 'sort': sort, 'range': range}) # json(), status_code
         print(params)
-        return self._send_get(self.server + '/documents?' + params)                
+        return self._send_get(self.server + '/documents?' + params)      
+
+    def freesearch(self, word):
+        params = urllib.parse.urlencode({'word': word}) 
+        print(params)
+        return self._send_get(self.server + '/documents?' + params)             
 
     def upload(self, data, path, id):
         url = self.server + '/document'
@@ -290,9 +295,19 @@ class MMClient:
         url = self.server + '/count'
         return self._send_get(url)
 
+    def comment(self, id, comment):
+        rsp = self._send_post(self.server + "/document/" + id + "/comment", data={"comment": comment})
+        return rsp
+
+    def get_comment(self, id):
+        url = self.server + '/document/' + id + '/comment'
+        rsp = self._send_get(url)
+        if not rsp.ok:
+            return False, rsp.text
+        return True, rsp.text
+
     def dump(self, response):
         print(response.request.method)
         print(response.request.url)
         print(response.request.body)
         print(response.request.headers)
-

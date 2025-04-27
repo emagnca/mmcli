@@ -1,7 +1,6 @@
 <h2>Command client for MMDok used to store documents and metadata.</h2>
-MMDok is a modern, minimal, simple and scalable DMS that is designed to be able to handle hundreds of millions of documents. 
-It can run serverless, in a container or locally with the same code base. MMCli is a command line client to MMDok.<br><br>
-
+TinyDS is a modern, minimal, simple and scalable DMS that is designed to be able to handle hundreds of millions of documents. 
+It can run serverless, in a container or locally with the same code base. MMCli is a command line client to TinyDS. For more info see <a href="https://tinyds.com">TinyDS</a><br><br>
 <h2>Getting started with the cli</h2>
 
 With Python3 installed run the following command on the command prompt:

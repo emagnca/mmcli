@@ -2,9 +2,9 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-#mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
-mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
-                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
+mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
+#mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
+#                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
 
 class MMCli(cmd2.Cmd):
 
@@ -82,6 +82,11 @@ class MMCli(cmd2.Cmd):
         #sort = '{"kundnummer":1}'
         #range = '{"from":0, "to":3}'
         r = mmclient.search(filter, sort, range) #{"doctype":"kunddokument", "kundnummer":"AAA141414"}
+        pprint.pprint(r.json())
+
+    def do_freesearch(self, line):
+        word = input('word: ')
+        r = mmclient.freesearch(word) #{"doctype":"kunddokument", "kundnummer":"AAA141414"}
         pprint.pprint(r.json())
 
     def do_link(self, line):
@@ -225,6 +230,18 @@ class MMCli(cmd2.Cmd):
         id = input('Documentid: ')
         rsp = mmclient.delete(id, False)
         print(rsp.content) 
+
+    def do_comment(self, line):
+        id = input('Documentid: ')
+        comment = input('Comment: ')
+        rsp = mmclient.comment(id, comment)
+        print(rsp.text)
+
+    def do_getcomment(self, line):
+        id = input('Documentid: ')
+        isOk, r = mmclient.get_comment(id)
+        if not isOk: print("Failed to get comment")
+        else: print(r)
 
     def do_help(self, line):
         help(line)
