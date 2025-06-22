@@ -6,6 +6,29 @@ import urllib
 import webbrowser
 
 class MMClient:
+    def admin_create(self, resource, data):
+        url = f"{self.server}/admin/{resource}"
+        print("calling:" + url)
+        response = self._send_post(url, data)
+        return response
+
+    def admin_read(self, resource, id=None):
+        url = f"{self.server}/admin/{resource}"
+        if id:
+            url += f"/{id}"
+        response = self._send_get(url)
+        return response
+
+    def admin_update(self, resource, id, data):
+        url = f"{self.server}/admin/{resource}/{id}"
+        response = self._send_put(url, data)
+        return response
+
+    def admin_delete(self, resource, id):
+        url = f"{self.server}/admin/{resource}/{id}"
+        response = self._send_delete(url)
+        return response
+
     def __init__(self, server, login_server):
         self.server = server
         self.login_server = login_server
