@@ -26,6 +26,7 @@ class MMAdmin(cmd2.Cmd):
                 data = json.load(f)
             rsp = mmclient.admin_create(resource, data)
             print(f'Status: {rsp.status_code}')
+            print(rsp.text)
         except Exception as e:
             print(f'Error: {e}')
 
