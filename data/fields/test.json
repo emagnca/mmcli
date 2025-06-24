@@ -1,0 +1,14 @@
+{
+  "name": "Test",
+  "displayname": "Test",
+  "displayname_sv": "Test",
+  "type": "number",
+  "placeholder": "900",
+  "order": 7,
+  "format": "^\\d+$",
+  "search": true,
+  "index": false,
+  "update": true,
+  "general": false,
+  "mandatory": false
+}

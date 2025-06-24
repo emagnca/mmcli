@@ -12,20 +12,20 @@ class MMClient:
         response = self._send_post(url, data)
         return response
 
-    def admin_read(self, resource, id=None):
+    def admin_read(self, resource, name=None):
         url = f"{self.server}/admin/{resource}"
-        if id:
-            url += f"/{id}"
+        if name:
+            url += f"/{name}"
         response = self._send_get(url)
         return response
 
-    def admin_update(self, resource, id, data):
-        url = f"{self.server}/admin/{resource}/{id}"
+    def admin_update(self, resource, name, data):
+        url = f"{self.server}/admin/{resource}/{name}"
         response = self._send_put(url, data)
         return response
 
-    def admin_delete(self, resource, id):
-        url = f"{self.server}/admin/{resource}/{id}"
+    def admin_delete(self, resource, name):
+        url = f"{self.server}/admin/{resource}/{name}"
         response = self._send_delete(url)
         return response
 
