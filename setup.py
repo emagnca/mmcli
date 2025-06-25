@@ -12,7 +12,12 @@ setup(
     install_requires=['cmd2==1.5.0',
                       'requests==2.25.0',
                       'urllib3==1.26.2'],
-
+    entry_points={
+        'console_scripts': [
+            'mmcli=mmcli.mmcli:main',
+            'mmadmin=mmcli.mmadmin:main',
+        ],
+    },
     classifiers=[
         'Development Status :: 1 - Planning',
         'License :: OSI Approved :: BSD License',       

@@ -252,5 +252,9 @@ class MMCli(cmd2.Cmd):
 def run():
     MMCli().cmdloop()
 
+def main():
+    from mmcli import mmcli
+    mmcli.run()
+
 if __name__ == '__main__':
     MMCli(persistent_history_file="~/.mmcli_history").cmdloop()

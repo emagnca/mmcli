@@ -1,5 +1,5 @@
 {
-  "name": "Test",
+  "name": "test_field",
   "displayname": "Test",
   "displayname_sv": "Test",
   "type": "number",
@@ -11,4 +11,4 @@
   "update": true,
   "general": false,
   "mandatory": false
-}
+} 

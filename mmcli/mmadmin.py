@@ -112,5 +112,9 @@ class MMAdmin(cmd2.Cmd):
 def run():
     MMAdmin().cmdloop()
 
+def main():
+    from mmcli import mmadmin
+    mmadmin.run()
+
 if __name__ == '__main__':
     MMAdmin().cmdloop()
