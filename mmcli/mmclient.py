@@ -223,15 +223,29 @@ class MMClient:
         return True, "OK"
 
     def view(self, id, version=None):
+        import base64
+        import os
         url = self.server + '/document/' + id
-        if version: 
+        if version:
             url += '?version=' + version
         response = self._send_get(url)
         if not response.ok:
             return False, ('Get document failed. Reason: ' +
                   response.reason + '. Text:' + response.text)
-        webbrowser.open(response.json()['url'])
-        return True, "OK"
+        resp_json = response.json()
+        # If response contains a URL, open it
+        if 'url' in resp_json:
+            webbrowser.open(resp_json['url'])
+            return True, "OK"
+        # If response contains a PDF buffer, decode and open it
+        if 'buffer' in resp_json and resp_json.get('contentType') == 'application/pdf':
+            pdf_path = os.path.join(os.path.dirname(__file__), 'tmp_viewed.pdf')
+            with open(pdf_path, 'wb') as f:
+                f.write(bytes(resp_json['buffer']['data']))
+            webbrowser.open(f'file://{os.path.abspath(pdf_path)}')
+            return True, "OK"
+        return False, "No viewable content (no url or PDF buffer) in response."
+
 
     def metadata(self, id):
         url = self.server + '/document/' + id + '?type=metadata'
