@@ -1,9 +1,27 @@
-import cmd2
-import json
+import cmd2, json, os, re, pprint
 from mmcli.mmclient import MMClient
-import pprint
 
 mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
+
+def expand_refs(obj, base_path=None):
+    if isinstance(obj, dict):
+        return {k: expand_refs(v, base_path) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [expand_refs(i, base_path) for i in obj]
+    elif isinstance(obj, str) and obj.startswith('ref:'):
+        ref_filename = obj[4:]
+        ref_path = os.path.join(base_path if base_path is not None else '', ref_filename)
+        try:
+            with open(ref_path, 'r', encoding='utf-8') as rf:
+                content = rf.read()
+                # Remove only tabs, newlines, and carriage returns, but preserve spaces
+                content = re.sub(r'[\t\n\r]+', '', content)
+                return content
+        except Exception as e:
+            print(f'Error reading referenced file {ref_path}: {e}')
+            return obj
+    else:
+        return obj
 
 class MMAdmin(cmd2.Cmd):
     """
@@ -11,7 +29,6 @@ class MMAdmin(cmd2.Cmd):
     """
     def do_create(self, line):
         """Create a new admin resource. Usage: create <resource> <json_file_path>"""
-        import os
         try:
             parts = line.split(' ', 1)
             if len(parts) < 2:
@@ -23,10 +40,24 @@ class MMAdmin(cmd2.Cmd):
                 print(f'File not found: {file_path}')
                 return
             with open(file_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            rsp = mmclient.admin_create(resource, data)
-            print(f'Status: {rsp.status_code}')
-            print(rsp.text)
+                content = f.read()
+            try:
+                data = json.loads(content)
+            except Exception:
+                # Try newline-delimited JSON (ndjson)
+                data = [json.loads(line) for line in content.splitlines() if line.strip()]
+            # If it's a single object, wrap as list for uniform handling
+            if isinstance(data, dict):
+                data = [data]
+            for idx, obj in enumerate(data):
+                try:
+                    obj = expand_refs(obj, base_path=os.path.dirname(file_path))
+                    rsp = mmclient.admin_create(resource, obj)
+                    print(f'Object {idx+1}: Status: {rsp.status_code}')
+                    print(rsp.text)
+                except Exception as e:
+                    print(f'Object {idx+1}: Error: {e}')
+
         except Exception as e:
             print(f'Error: {e}')
 
@@ -44,7 +75,6 @@ class MMAdmin(cmd2.Cmd):
 
     def do_update(self, line):
         """Update an admin resource. Usage: update <resource> <id> <json_file_path>"""
-        import os
         try:
             parts = line.split(' ', 2)
             if len(parts) < 3:
@@ -56,9 +86,23 @@ class MMAdmin(cmd2.Cmd):
                 print(f'File not found: {file_path}')
                 return
             with open(file_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            rsp = mmclient.admin_update(resource, id, data)
-            print(f'Status: {rsp.status_code}')
+                content = f.read()
+            try:
+                data = json.loads(content)
+            except Exception:
+                # Try newline-delimited JSON (ndjson)
+                data = [json.loads(line) for line in content.splitlines() if line.strip()]
+            # If it's a single object, wrap as list for uniform handling
+            if isinstance(data, dict):
+                data = [data]
+            for idx, obj in enumerate(data):
+                try:
+                    obj = expand_refs(obj, base_path=os.path.dirname(file_path))
+                    rsp = mmclient.admin_update(resource, id, obj)
+                    print(f'Object {idx+1}: Status: {rsp.status_code}')
+                except Exception as e:
+                    print(f'Object {idx+1}: Error: {e}')
+
         except Exception as e:
             print(f'Error: {e}')
 

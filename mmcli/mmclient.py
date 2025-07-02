@@ -1,4 +1,5 @@
 import mimetypes
+import os
 import pprint
 import requests
 import time
@@ -223,8 +224,6 @@ class MMClient:
         return True, "OK"
 
     def view(self, id, version=None):
-        import base64
-        import os
         url = self.server + '/document/' + id
         if version:
             url += '?version=' + version
