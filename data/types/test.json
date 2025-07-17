@@ -1,0 +1,7 @@
+{
+  "name": "test_type",
+  "order": 1,
+  "fields": [
+	"test_field"
+  ]
+}

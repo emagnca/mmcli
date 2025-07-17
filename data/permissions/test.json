@@ -1,0 +1,13 @@
+{
+  "name": "test_permission",
+  "type": "test_type",
+  "condition": "{ \"metadata.test_field\": { \"$gt\": 300, \"$lt\": 900 } }",
+  "actions": [
+    "list",
+    "update",
+    "read",
+    "create",
+    "delete"
+  ]
+}
+

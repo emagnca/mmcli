@@ -1,0 +1,12 @@
+{
+  "name": "test_role",
+  "read": [
+    "test_type"
+  ],
+  "write": [
+    "test_type"
+  ],
+  "permissions": [
+    "test_permission"
+  ]
+}

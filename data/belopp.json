@@ -1,0 +1,10 @@
+{
+  "name": "test",
+  "customer": "edok",
+  "order": 1,
+  "fields": [
+    "Fakturanr",
+    "Belopp",
+	"Test"
+  ]
+}

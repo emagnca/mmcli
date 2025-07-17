@@ -2,7 +2,7 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
+mmclient = MMClient('http://localhost:3001', 'http://localhost:3001')
 #mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
 #                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
 

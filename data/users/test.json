@@ -1,0 +1,11 @@
+{
+  "name": "test",
+  "email": "test@tinyds.se",
+  "auth": "metadata",
+  "customer": "edok",
+  "create":["test_type"],          
+  "search":["test_type"],
+  "roles": [
+    "test_role"
+  ]
+}

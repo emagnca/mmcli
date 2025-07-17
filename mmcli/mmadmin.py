@@ -1,7 +1,7 @@
 import cmd2, json, os, re, pprint
 from mmcli.mmclient import MMClient
 
-mmclient = MMClient('http://localhost:3001', 'http://localhost:3008')
+mmclient = MMClient('http://localhost:3001', 'http://localhost:3001')
 
 def expand_refs(obj, base_path=None):
     if isinstance(obj, dict):
