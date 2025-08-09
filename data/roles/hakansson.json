@@ -1,0 +1,12 @@
+{
+  "name": "superuser_role",
+  "read": [
+    "Forehand", "Backhand"
+  ],
+  "write": [
+    "Forehand", "Backhand"
+  ],
+  "permissions": [
+    "forehand_permission", "backhand_permission"
+  ]
+}

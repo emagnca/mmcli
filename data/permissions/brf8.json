@@ -1,0 +1,152 @@
+[
+    {
+        "name": "arsredovisning_full_permission",
+        "type": "Årsredovisning",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+    {
+        "name": "betalning_full_permission",
+        "type": "Betalning",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+        {
+        "name": "register_full_permission",
+        "type": "Register",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+        {
+        "name": "forsakring_full_permission",
+        "type": "Försäkring",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+        {
+        "name": "skatteverket_full_permission",
+        "type": "Skatteverket",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+        {
+        "name": "redovisning_full_permission",
+        "type": "Redovisning",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+        {
+        "name": "motesanteckningar_full_permission",
+        "type": "Mötesanteckningar",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+    {
+        "name": "protokoll_full_permission",
+        "type": "Protokoll",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+        {
+        "name": "kommunikation_full_permission",
+        "type": "Kommunikation",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+    {
+        "name": "dokument_full_permission",
+        "type": "Dokument",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },  
+    {
+        "name": "pantbrev_full_permission",
+        "type": "Pantbrev",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+    {
+        "name": "arsredovisning_read_permission",
+        "type": "Årsredovisning",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "read"
+        ]
+    },
+    {
+        "name": "betalning_read_permission",
+        "type": "Betalning",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "read"
+        ]
+    }
+]

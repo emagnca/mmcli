@@ -1,0 +1,59 @@
+[
+  {
+    "name": "superuser_role",
+    "read": [
+      "Årsredovisning",
+      "Betalning",
+      "Register",
+      "Försäkring",
+      "Skatteverket",
+      "Redovisning",
+      "Mötesanteckningar",
+      "Protokoll",
+      "Kommunikation",
+      "Dokument",
+      "Pantbrev"
+    ],
+    "write": [
+      "Årsredovisning",
+      "Betalning",
+      "Register",
+      "Försäkring",
+      "Skatteverket",
+      "Redovisning",
+      "Mötesanteckningar",
+      "Protokoll",
+      "Kommunikation",
+      "Dokument",
+      "Pantbrev"
+    ],
+    "permissions": [
+      "arsredovisning_full_permission",
+      "betalning_full_permission",
+      "register_full_permission",
+      "forsakring_full_permission",
+      "skatteverket_full_permission",
+      "redovisning_full_permission",
+      "motesanteckningar_full_permission",
+      "protokoll_full_permission",
+      "kommunikation_full_permission",
+      "dokument_full_permission",
+      "pantbrev_full_permission"
+    ]
+  },
+  {
+    "name": "reader",
+    "read": [
+      "Årsredovisning",
+      "Betalning"
+    ],
+    "write": [
+      "Årsredovisning",
+      "Betalning"
+    ],
+    "permissions": [
+      "arsredovisning_read_permission",
+      "betalning_read_permission"
+    ]
+  }
+]

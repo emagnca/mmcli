@@ -1,0 +1,26 @@
+[
+    {
+        "name": "forehand_permission",
+        "type": "Forehand",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    },
+    {
+        "name": "backhand_permission",
+        "type": "Backhand",
+        "condition": "{}",
+        "actions": [
+            "list",
+            "update",
+            "read",
+            "create",
+            "delete"
+        ]
+    }    
+]

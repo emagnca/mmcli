@@ -1,0 +1,44 @@
+ [
+    {
+      "name": "title",
+      "displayname": "Title",
+      "displayname_sv": "Titel",
+      "type": "text",
+      "placeholder": "Dokumenttitel",
+      "order": 1,
+      "format": ".{5,}",
+      "search": true,
+      "index": false,
+      "update": true,
+      "general": true,
+      "mandatory": true
+    },
+   {
+      "name": "tags",
+      "displayname": "Tags",
+      "displayname_sv": "Taggar",
+      "type": "text",
+      "placeholder": "tag1 tag2",
+      "order": 2,
+      "format": ".+",
+      "search": true,
+      "index": false,
+      "update": true,
+      "general": true,
+      "mandatory": false
+    },
+    {
+      "name": "date",
+      "displayname": "Date",
+      "displayname_sv": "Datum",
+      "type": "date",
+      "placeholder": "2024-08-27",
+      "order": 3,
+      "format": ".+",
+      "search": true,
+      "index": false,
+      "update": true,
+      "general": true,
+      "mandatory": true
+    }
+]
