@@ -6,6 +6,7 @@ import time
 import urllib
 import webbrowser
 
+
 class MMClient:
     def admin_create(self, resource, data):
         url = f"{self.server}/admin/{resource}"
@@ -245,6 +246,18 @@ class MMClient:
             return True, "OK"
         return False, "No viewable content (no url or PDF buffer) in response."
 
+    def get_url(self, id):
+        url = self.server + '/document/' + id + '?share=true'
+        response = self._send_get(url)
+        if not response.ok:
+            return False, ('Get document failed. Reason: ' +
+                  response.reason + '. Text:' + response.text)
+        resp_json = response.json()
+        # If response contains a URL, open it
+        if 'url' in resp_json:
+            return True, resp_json['url']
+        else:
+            return False, "No URL in response"
 
     def metadata(self, id):
         url = self.server + '/document/' + id + '?type=metadata'

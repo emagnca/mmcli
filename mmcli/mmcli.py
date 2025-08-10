@@ -2,9 +2,9 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-mmclient = MMClient('http://localhost:3001', 'http://localhost:3001')
-#mmclient = MMClient('https://v84wxfpyu8.execute-api.eu-north-1.amazonaws.com/prod', 
-#                    'https://4gprt3hjeb.execute-api.eu-north-1.amazonaws.com/prod')
+SERVER='https://veqw5068xl.execute-api.eu-north-1.amazonaws.com/prod'
+#SERVER='http://localhost:3001'
+mmclient=MMClient(SERVER, SERVER)
 
 class MMCli(cmd2.Cmd):
 
@@ -171,6 +171,12 @@ class MMCli(cmd2.Cmd):
         id = input('Documentid: ')
         isOk, r = mmclient.view(id)
         if not isOk: print(r)
+
+    def do_url(self, line):
+        id = input('Documentid: ')
+        isOk, r = mmclient.get_url(id)
+        if isOk: print("URL to document: " + r)
+        else: print(r)
 
     def do_view_version(self, line):
         id = input('Documentid: ')
