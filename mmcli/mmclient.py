@@ -6,7 +6,9 @@ import time
 import urllib
 import webbrowser
 
+
 class MMClient:
+
     def admin_create(self, resource, data):
         url = f"{self.server}/admin/{resource}"
         print("calling:" + url)
@@ -245,6 +247,18 @@ class MMClient:
             return True, "OK"
         return False, "No viewable content (no url or PDF buffer) in response."
 
+    def get_url(self, id):
+        url = self.server + '/document/' + id + '?share=true'
+        response = self._send_get(url)
+        if not response.ok:
+            return False, ('Get document failed. Reason: ' +
+                  response.reason + '. Text:' + response.text)
+        resp_json = response.json()
+        # If response contains a URL, open it
+        if 'url' in resp_json:
+            return True, resp_json['url']
+        else:
+            return False, "No URL in response"
 
     def metadata(self, id):
         url = self.server + '/document/' + id + '?type=metadata'
@@ -342,6 +356,30 @@ class MMClient:
             return False, rsp.text
         return True, rsp.text
 
+    def list_templates(self, doctype=None):
+        """
+        List templates for the current user. Optionally filter by doctype.
+        :param doctype: Optional document type to filter templates.
+        :return: Response object from the server.
+        """
+        url = f"{self.server}/template"
+        if doctype:
+            url += f"?doctype={doctype}"
+        response = self._send_get(url)
+        return response
+
+    def create_document_from_template(self, templateName, metadata):
+        """
+        Create a document from a template and metadata.
+        :param templateName: Name of the template to use.
+        :param metadata: Metadata dictionary for the new document.
+        :return: Response object from the server.
+        """
+        url = f"{self.server}/template/document"
+        data = {"templateName": templateName, "metadata": metadata}
+        response = self._send_post(url, data)
+        return response
+    
     def dump(self, response):
         print(response.request.method)
         print(response.request.url)
