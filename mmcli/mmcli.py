@@ -2,8 +2,8 @@ import cmd2, getpass, json, os, pprint
 from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
-SERVER='https://veqw5068xl.execute-api.eu-north-1.amazonaws.com/prod'
-#SERVER='http://localhost:3001'
+#SERVER='https://veqw5068xl.execute-api.eu-north-1.amazonaws.com/prod'
+SERVER='http://localhost:3001'
 mmclient=MMClient(SERVER, SERVER)
 
 class MMCli(cmd2.Cmd):
@@ -249,7 +249,33 @@ class MMCli(cmd2.Cmd):
         if not isOk: print("Failed to get comment")
         else: print(r)
 
+    def do_listtemplates(self, line):
+        """List templates for the current user. Optionally filter by doctype."""
+        doctype = input('Doctype (optional): ')
+        doctype = doctype if doctype.strip() else None
+        response = mmclient.list_templates(doctype)
+        try:
+            pprint.pprint(response.json())
+        except Exception:
+            print(response.text)
+
+    def do_createfromtemplate(self, line):
+        """Create a document from a template and metadata."""
+        template_name = input('Template name: ')
+        metadata_str = input('Metadata (JSON): ')
+        try:
+            metadata = json.loads(metadata_str)
+        except Exception as e:
+            print(f"Invalid JSON for metadata: {e}")
+            return
+        response = mmclient.create_document_from_template(template_name, metadata)
+        try:
+            pprint.pprint(response.json())
+        except Exception:
+            print(response.text)
+
     def do_help(self, line):
+        
         help(line)
 
     def do_quit(self, line):
