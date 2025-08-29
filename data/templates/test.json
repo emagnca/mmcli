@@ -1,4 +1,6 @@
 {
-  "name": "testtemplate",
-  "html": "ref:hakansson.json"
+  "name": "testtemplate3",
+  "content": "ref:testpdf.json",
+  "type": "pdfmake",
+  "doctype": "Faktura"
 }
