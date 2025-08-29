@@ -1,0 +1,5 @@
+{"content": [
+		"1. Kundnr: {{metadata.Belopp}}",
+		"2. Fakturanr: {{metadata.Fakturanr}}"
+	]
+}
