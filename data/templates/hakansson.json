@@ -1,0 +1,7 @@
+{
+    "content": [
+        "Exempel på dynamisk pdf-generering",
+        "Title: {{metadata.title}}",
+        "Date: {{metadata.date}}"
+    ]
+}
