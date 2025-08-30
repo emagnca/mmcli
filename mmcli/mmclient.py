@@ -380,6 +380,17 @@ class MMClient:
         response = self._send_post(url, data)
         return response
     
+    def sign(self, document_id):
+        """
+        Sign a document by sending a POST request to /sign endpoint.
+        :param document_id: ID of the document to sign.
+        :return: Response object from the server.
+        """
+        url = f"{self.server}/sign"
+        data = {"documentId": document_id}
+        response = self._send_post(url, data)
+        return response
+    
     def dump(self, response):
         print(response.request.method)
         print(response.request.url)

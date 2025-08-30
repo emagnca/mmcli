@@ -6,6 +6,8 @@ from mmcli.mmclient import MMClient
 SERVER='http://localhost:3001'
 mmclient=MMClient(SERVER, SERVER)
 
+print(SERVER)
+
 class MMCli(cmd2.Cmd):
 
     def do_exit(self,*args):
@@ -273,6 +275,21 @@ class MMCli(cmd2.Cmd):
             pprint.pprint(response.json())
         except Exception:
             print(response.text)
+
+    def do_sign(self, line):
+        """Sign a document by document ID."""
+        document_id = input('Document ID: ')
+        if not document_id.strip():
+            print("Document ID is required")
+            return
+        response = mmclient.sign(document_id)
+        if response.ok:
+            try:
+                pprint.pprint(response.json())
+            except Exception:
+                print(response.text)
+        else:
+            print(f"Failed to sign document. Status: {response.status_code}, Response: {response.text}")
 
     def do_help(self, line):
         
