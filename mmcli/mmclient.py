@@ -199,15 +199,19 @@ class MMClient:
         if 'url' not in response: 
             return False, response
         url = response['url']
-        fields = response['fields']
+        fields = response.get('fields', None)
         id = response['id']
+        method = response['method']
         mimetype = mimetypes.guess_type(path)
         if len(mimetype)<0: mimetype='application/octet-stream' 
         with open(path, 'rb') as f:
-            files = {'file': (path, f, mimetype),
+            if method == 'post':
+                files = {'file': (path, f, mimetype),
                  'Content-Disposition': 'form-data; name="files"',
                  'Content-Type': mimetype}
-            response = requests.post(url, files=files, data=fields)
+                response = requests.post(url, files=files, data=fields)
+            elif method == 'put':
+                response = requests.put(url, headers={"Content-Type": "application/pdf"}, data=f.read())
             if not response.ok:
                 return False, ('Failed upload to Minio. Reason: ' +
                   response.reason + '. Text:' + response.text)
@@ -226,7 +230,7 @@ class MMClient:
         return True, "OK"
 
     def view(self, id, version=None):
-        url = self.server + '/document/' + id
+        url = self.server + '/document/' + id + '?isAttachment=false'
         if version:
             url += '?version=' + version
         response = self._send_get(url)
