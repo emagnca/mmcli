@@ -1,0 +1,11 @@
+{
+    "name": "testermmdok",
+    "email": "testermmdok@yahoo.com",
+    "auth": "metadata",
+    "customer": "brf8",
+    "create":[],          
+    "search":[],
+    "roles": [
+      "reader"
+    ]
+}

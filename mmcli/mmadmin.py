@@ -117,7 +117,7 @@ class MMAdmin(cmd2.Cmd):
             return
         resource, id = parts
         rsp = mmclient.admin_delete(resource, id)
-        print(f'Status: {rsp.status_code}')
+        print(f'Status: {rsp.status_code} - {rsp.text}')
 
     def do_exit(self, line):
         """Exit the admin CLI."""

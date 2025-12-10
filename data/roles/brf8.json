@@ -44,14 +44,13 @@
   {
     "name": "reader",
     "read": [
-      "Årsredovisning",
+      "Skatteverket",
       "Betalning"
     ],
     "write": [
-      "Betalning"
     ],
     "permissions": [
-      "arsredovisning_read_permission",
+      "skatteverket_read_permission",
       "betalning_read_permission"
     ]
   }

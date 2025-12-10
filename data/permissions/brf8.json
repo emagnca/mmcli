@@ -143,6 +143,15 @@
     {
         "name": "betalning_read_permission",
         "type": "Betalning",
+        "condition": "{\"metadata.Year\": {\"$gte\": \"2024\"}}",
+        "actions": [
+            "list",
+            "read"
+        ]
+    },
+    {
+        "name": "skatteverket_read_permission",
+        "type": "Skatteverket",
         "condition": "{}",
         "actions": [
             "list",
