@@ -1,8 +1,8 @@
 <h2>Command client for TinyDS used to store documents and metadata.</h2>
 TinyDS is a modern, minimal, simple and scalable DMS that is designed to be able to handle hundreds of millions of documents. 
 It can run serverless, in a container or locally with the same code base. MMCli is a command line client to MMDok.<br><br>
-For api documentation on the interfaces used by the cli see https://www.tinyds.se/api_documentation.html<br>
-For general information on TinyDS see https://www.tinyds.se/index_en.html
+For api documentation on the interfaces used by the cli see <a href="https://www.tinyds.se/api_documentation.html" target="_blank">api documentation</a>.<br>
+For general information on TinyDS see <a href="https://www.tinyds.se/index_en.html" target="_blank">tinyds</a>.
 
 <h2>Getting started with the cli</h2>
 
@@ -168,7 +168,7 @@ admin operations will be available via an api and cli.
 
 <h3>Notifications</h3>
 Notifications can be received upon document creation or deletion. For an example this can be look at 
-this link: <a href="https://master.d8z78xbyyxmus.amplifyapp.com/notification.html">notification client</a>
+this link: <a href="https://master.d8z78xbyyxmus.amplifyapp.com/notification.html" target="_blank">notification client</a>
 The client takes the url parameter ?group=<i>group_name</i>, where the <i>group_name</i> is the name of your group. 
 
 <h3>Server side</h3>
@@ -178,7 +178,7 @@ againt a server running in a Docker container.
 
 <h3>Other clients</h3>
 MMDok can be accessed via a REST API. MMCli contains a Python client using this api.<br>
-There is a gui client available at <a href="https://master.d8z78xbyyxmus.amplifyapp.com/">gui client</a>. The same login will work.
+There is a gui client available at <a href="https://master.d8z78xbyyxmus.amplifyapp.com/" target="_blank">gui client</a>. The same login will work.
 
 <h2>Administration</h2>
 Administrations of documenttypes, users and their permissions can also be done via MMCli using the mmadmin module.
