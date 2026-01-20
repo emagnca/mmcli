@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='mmdok-cli',
-    version='1.4',    
+    version='1.11',    
     description='Cli client for TinyDS',
     url='https://github.com/emagnca/mmcli',
     author='emagnca',

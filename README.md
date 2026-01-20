@@ -1,31 +1,65 @@
-<h2>Command client for MMDok used to store documents and metadata.</h2>
+<h2>Command client for TinyDS used to store documents and metadata.</h2>
 TinyDS is a modern, minimal, simple and scalable DMS that is designed to be able to handle hundreds of millions of documents. 
-It can run serverless, in a container or locally with the same code base. MMCli is a command line client to TinyDS. For more info see <a href="https://tinyds.com">TinyDS</a><br><br>
+It can run serverless, in a container or locally with the same code base. MMCli is a command line client to MMDok.<br><br>
+For api documentation on the interfaces used by the cli see https://www.tinyds.se/api_documentation.html<br>
+For general information on TinyDS see https://www.tinyds.se/index_en.html
+
 <h2>Getting started with the cli</h2>
 
-With Python3 installed run the following command on the command prompt:
+With Python3 installed:
 
-$ <b> python -c "from mmcli import mmcli; mmcli.run()" </b><br><br>
+$ python -c "from mmcli import mmcli; mmcli.run()"<br><br>
 
 (Cmd) help<br><br>
 Commands:<br>
    <table>
+   <tr><td><b>add_signer</b></td><td><i>add a signer to a document</i></td></tr>
+   <tr><td><b>add_viewer</b></td><td><i>add a viewer to a document</i></td></tr>
    <tr><td><b>audit</b></td><td><i>print audit logs for a document</i></td></tr>
+   <tr><td><b>comment</b></td><td><i>add a comment to a document</i></td></tr>
    <tr><td><b>count</b></td><td><i>count documents</i></td></tr>
-   <tr><td><b>download</b></td><td><i>download a document to file</i></td></tr>
+   <tr><td><b>createfromtemplate</b></td><td><i>create a document from a template and metadata</i></td></tr>
    <tr><td><b>delete</b></td><td><i>deletes a document</i></td></tr>
+   <tr><td><b>delete_version</b></td><td><i>deletes a specific version of a document</i></td></tr>
+   <tr><td><b>download</b></td><td><i>download and show a document in the webbrowser</i></td></tr>
+   <tr><td><b>exit</b></td><td><i>exit the CLI</i></td></tr>
+   <tr><td><b>external_sign</b></td><td><i>open sign page for a document in browser</i></td></tr>
+   <tr><td><b>external_view</b></td><td><i>open view page for a document in browser</i></td></tr>
+   <tr><td><b>freesearch</b></td><td><i>free text search for words or parts thereof in document content</i></td></tr>
+   <tr><td><b>getcomment</b></td><td><i>get comments for a document</i></td></tr>
+   <tr><td><b>getlock</b></td><td><i>get lock status for a document</i></td></tr>
+   <tr><td><b>getprofile</b></td><td><i>get user profile</i></td></tr>
+   <tr><td><b>help</b></td><td><i>display help information</i></td></tr>
+   <tr><td><b>link</b></td><td><i>link two documents together</i></td></tr>
+   <tr><td><b>list</b></td><td><i>list linked documents</i></td></tr>
+   <tr><td><b>listtemplates</b></td><td><i>list templates for the current user</i></td></tr>
+   <tr><td><b>lock</b></td><td><i>lock a document</i></td></tr>
    <tr><td><b>login</b></td><td><i>used to log in to the server</i></td></tr>
+   <tr><td><b>login_server</b></td><td><i>change login server</i></td></tr>
+   <tr><td><b>logout</b></td><td><i>log out from the server</i></td></tr>
    <tr><td><b>metadata</b></td><td><i>prints metadata for a document</i></td></tr>
+   <tr><td><b>quit</b></td><td><i>quit the CLI</i></td></tr>
    <tr><td><b>register</b></td><td><i>register a user</i></td></tr>
+   <tr><td><b>reset_password</b></td><td><i>reset user password</i></td></tr>
    <tr><td><b>search</b></td><td><i>search documents</i></td></tr>
    <tr><td><b>server</b></td><td><i>change target server from the default</i></td></tr>
+   <tr><td><b>setprofile</b></td><td><i>set user profile</i></td></tr>
+   <tr><td><b>signers</b></td><td><i>list signers for a document</i></td></tr>
    <tr><td><b>types</b></td><td><i>lists available document types</i></td></tr>
+   <tr><td><b>unlink</b></td><td><i>unlink two documents</i></td></tr>
+   <tr><td><b>unlock</b></td><td><i>unlock a document</i></td></tr>
    <tr><td><b>update</b></td><td><i>updates a document's metadata</i></td></tr>
+   <tr><td><b>updateprofile</b></td><td><i>update user profile</i></td></tr>
    <tr><td><b>upload</b></td><td><i>upload either a new document or a new version</i></td></tr>
-   <tr><td><b>view</b></td><td><i>download and show a document in the webbrowser</i></td></tr>
+   <tr><td><b>url</b></td><td><i>get shareable URL for a document</i></td></tr>
+   <tr><td><b>users</b></td><td><i>list users</i></td></tr>
+   <tr><td><b>view</b></td><td><i>view a document in the browser</i></td></tr>
+   <tr><td><b>view_version</b></td><td><i>view a specific version of a document</i></td></tr>
+   <tr><td><b>viewers</b></td><td><i>list viewers for a document</i></td></tr>
 </table>
 
 For detailed help for a command type: 'help <command>'<br><br>
+
 
 <h3>Example session</h3>
 Note that if you at registration below answer that you don't belong to a group, you will be able to login
@@ -134,7 +168,7 @@ admin operations will be available via an api and cli.
 
 <h3>Notifications</h3>
 Notifications can be received upon document creation or deletion. For an example this can be look at 
-this link: <a href="https://mmdok.se/notification.html">notification client</a>
+this link: <a href="https://master.d8z78xbyyxmus.amplifyapp.com/notification.html">notification client</a>
 The client takes the url parameter ?group=<i>group_name</i>, where the <i>group_name</i> is the name of your group. 
 
 <h3>Server side</h3>
@@ -144,13 +178,74 @@ againt a server running in a Docker container.
 
 <h3>Other clients</h3>
 MMDok can be accessed via a REST API. MMCli contains a Python client using this api.<br>
-There is a gui client available at <a href="https://mmdok.se/">gui client</a>. The same login will work.
+There is a gui client available at <a href="https://master.d8z78xbyyxmus.amplifyapp.com/">gui client</a>. The same login will work.
 
-<h3>Administration</h3>
-Administrations of documenttypes, users and their permissions can be done via an admin gui (a proper api will come). Two screens
-from the gui is show below. Please contact us if you want to create a group.
-<h4>The main screen</h4>
-<img src="https://mmdok.se/images/admin_main.png" alt="Bilden hittades inte" width="800" height="450">
-<h4>Screen for defining fields</h4>
-<img src="https://mmdok.se/images/admin_field.png" alt="Bilden hittades inte" width="800" height="450">
+<h2>Administration</h2>
+Administrations of documenttypes, users and their permissions can also be done via MMCli using the mmadmin module.
 
+<h3>Admin Commands</h3>
+Admin commands are available via mmadmin for managing resources:<br>
+$ python -c "from mmcli import mmadmin; mmadmin.run()"<br><br>
+
+Admin Commands:<br>
+   <table>
+    <tr><td><b>create</b></td><td><i>create a new admin resource from JSON file</i></td></tr>
+    <tr><td><b>delete</b></td><td><i>delete an admin resource by ID</i></td></tr>
+    <tr><td><b>exit</b></td><td><i>exit the admin CLI</i></td></tr>
+    <tr><td><b>login</b></td><td><i>authenticate user via bankid, freja, apikey, or user-password</i></td></tr>
+    <tr><td><b>quit</b></td><td><i>exit the admin CLI</i></td></tr>
+    <tr><td><b>read</b></td><td><i>read an admin resource by name or list all</i></td></tr>
+   <tr><td><b>update</b></td><td><i>update an admin resource from JSON file</i></td></tr>
+  </table>
+<br>
+
+Resources handled by the admin cli are fields, document types, roles, users and templates.
+
+Let's say that we want to create a new document type with one field. We can create a JSON files with the following content:
+
+<h3>fields.json</h3>
+<pre><code>[
+  {
+    "name": "test_field",
+    "displayname": "Test",
+    "displayname_sv": "Test",
+    "type": "number",
+    "placeholder": "900",
+    "order": 7,
+    "format": "^\\d+$",
+    "search": true,
+    "index": false,
+    "update": true,
+    "general": false,
+    "mandatory": false
+  }
+]</code></pre> 
+
+and a file <h3>types.json</h3>
+<pre><code>[
+  {
+    "name": "test_type",
+    "order": 1,
+    "fields": [
+      "test_field"
+    ]
+  }
+]</code></pre>
+
+Then we can create the document type using the following command, assuming that admin@foo.bar is a user with admin permissions for the group:
+<pre><code>% python3 -c "from mmcli import mmadmin; mmadmin.run()"
+(Cmd) login
+  bankid|freja|apikey|user-password: u
+  Email: admin@foo.bar
+  Password: 
+  Code: 121212
+  Login succeded
+(Cmd) create field data/fields/fields.json
+  Object 1: Status: 200
+  ok
+(Cmd) create type data/types/types.json
+  Object 1: Status: 200
+  ok</code></pre>
+
+Permission, roles, users and templates can be created in a similar way, with json-files that can be stored in for example a git repository. 
+A full description is not given here.

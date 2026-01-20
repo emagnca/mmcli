@@ -2,7 +2,7 @@ import cmd2, json, os, re, pprint
 from mmcli.mmclient import MMClient
 
 #SERVER='https://veqw5068xl.execute-api.eu-north-1.amazonaws.com/prod'
-SERVER='http://localhost:3001'
+SERVER='http://localhost:3008'
 mmclient=MMClient(SERVER, SERVER)
 
 def expand_refs(obj, base_path=None):

@@ -3,7 +3,7 @@ from mmcli.helper import help
 from mmcli.mmclient import MMClient
 
 #SERVER='https://veqw5068xl.execute-api.eu-north-1.amazonaws.com/prod'
-SERVER='http://localhost:3001'
+SERVER='http://localhost:3008'
 mmclient=MMClient(SERVER, SERVER)
 
 print(SERVER)
@@ -150,11 +150,6 @@ class MMCli(cmd2.Cmd):
         print(isOk)
         print(r) 
 
-    """
-    curl -H "Content-Type: application/json" -d '{"directory":"/data/docs","doctype":"Faktura",
-    "documents":[{"file":"dummy.pdf","metadata":{"Fakturanr":"123456"}}]}' 
-    http://localhost:3001/documents
-    """
     def do_batch(self, line):
         documents = []
         doctype = input('Document type: ')
@@ -276,20 +271,95 @@ class MMCli(cmd2.Cmd):
         except Exception:
             print(response.text)
 
-    def do_sign(self, line):
-        """Sign a document by document ID."""
+    def do_external_sign(self, line):
+        """Sign a document by document ID. The signer shall be added to the document with do_add_signer."""
         document_id = input('Document ID: ')
         if not document_id.strip():
             print("Document ID is required")
             return
-        response = mmclient.sign(document_id)
+        mmclient.sign(document_id)
+        print(f"Opening sign page for document {document_id} in browser...")
+
+    def do_external_view(self, line):
+        """View a document by document ID. The viewer shall be added to the document with do_add_viewer."""
+        document_id = input('Document ID: ')
+        if not document_id.strip():
+            print("Document ID is required")
+            return
+        mmclient.view_external(document_id)
+        print(f"Opening view page for document {document_id} in browser...")
+
+    def do_add_signer(self, line):
+        """Add a signer to a document."""
+        document_id = input('Document ID: ')
+        if not document_id.strip():
+            print("Document ID is required")
+            return
+        email = input('Email: ')
+        if not email.strip():
+            print("Email is required")
+            return
+        message = input('Message: ')
+        if not message.strip():
+            print("Message is required")
+            return
+        response = mmclient.add_signer(document_id, email, message)
         if response.ok:
             try:
                 pprint.pprint(response.json())
             except Exception:
                 print(response.text)
         else:
-            print(f"Failed to sign document. Status: {response.status_code}, Response: {response.text}")
+            print(f"Failed to add signer. Status: {response.status_code}, Response: {response.text}")
+
+    def do_add_viewer(self, line):
+        """Add a viewer to a document."""
+        document_id = input('Document ID: ')
+        if not document_id.strip():
+            print("Document ID is required")
+            return
+        email = input('Email: ')
+        if not email.strip():
+            print("Email is required")
+            return
+        response = mmclient.add_viewer(document_id, email)
+        if response.ok:
+            try:
+                pprint.pprint(response.json())
+            except Exception:
+                print(response.text)
+        else:
+            print(f"Failed to add viewer. Status: {response.status_code}, Response: {response.text}")
+
+    def do_signers(self, line):
+        """View signers for a document."""
+        document_id = input('Document ID: ')
+        if not document_id.strip():
+            print("Document ID is required")
+            return
+        response = mmclient.get_signers(document_id)
+        if response.ok:
+            try:
+                pprint.pprint(response.json())
+            except Exception:
+                print(response.text)
+        else:
+            print(f"Failed to get signers. Status: {response.status_code}, Response: {response.text}")
+
+    def do_viewers(self, line):
+        """View viewers for a document."""
+        document_id = input('Document ID: ')
+        if not document_id.strip():
+            print("Document ID is required")
+            return
+        response = mmclient.get_viewers(document_id)
+        if response.ok:
+            try:
+                pprint.pprint(response.json())
+            except Exception:
+                print(response.text)
+        else:
+            print(f"Failed to get viewers. Status: {response.status_code}, Response: {response.text}")
 
     def do_help(self, line):
         

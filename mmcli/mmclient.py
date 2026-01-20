@@ -386,13 +386,65 @@ class MMClient:
     
     def sign(self, document_id):
         """
-        Sign a document by sending a POST request to /sign endpoint.
+        Open the sign page for a document in the browser.
         :param document_id: ID of the document to sign.
+        """
+        encoded_id = urllib.parse.quote(document_id)
+        url = f"{self.server}/sign?documentId={encoded_id}"
+        webbrowser.open(url)
+    
+    def view_external(self, document_id):
+        """
+        Open the view page for a document in the browser.
+        :param document_id: ID of the document to view.
+        """
+        encoded_id = urllib.parse.quote(document_id)
+        url = f"{self.server}/view?documentId={encoded_id}"
+        webbrowser.open(url)
+    
+    def add_signer(self, document_id, email, message):
+        """
+        Add a signer to a document by sending a POST request to /add-signer endpoint.
+        :param document_id: ID of the document.
+        :param email: Email of the signer to add.
+        :param message: Message to send with the signer invitation.
         :return: Response object from the server.
         """
-        url = f"{self.server}/sign"
-        data = {"documentId": document_id}
+        url = f"{self.server}/add-signer"
+        data = {"documentId": document_id, "email": email, "message": message}
         response = self._send_post(url, data)
+        return response
+    
+    def add_viewer(self, document_id, email):
+        """
+        Add a viewer to a document by sending a POST request to /add-viewer endpoint.
+        :param document_id: ID of the document.
+        :param email: Email of the viewer to add.
+        :return: Response object from the server.
+        """
+        url = f"{self.server}/add-viewer"
+        data = {"documentId": document_id, "email": email}
+        response = self._send_post(url, data)
+        return response
+    
+    def get_signers(self, document_id):
+        """
+        Get the list of signers for a document.
+        :param document_id: ID of the document.
+        :return: Response object from the server.
+        """
+        url = f"{self.server}/signers?documentId={urllib.parse.quote(document_id)}"
+        response = self._send_get(url)
+        return response
+    
+    def get_viewers(self, document_id):
+        """
+        Get the list of viewers for a document.
+        :param document_id: ID of the document.
+        :return: Response object from the server.
+        """
+        url = f"{self.server}/viewers?documentId={urllib.parse.quote(document_id)}"
+        response = self._send_get(url)
         return response
     
     def dump(self, response):
