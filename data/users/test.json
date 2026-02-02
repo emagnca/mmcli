@@ -1,8 +1,8 @@
 {
-  "name": "test",
-  "email": "test@tinyds.se",
+  "name": "theuser",
+  "email": "theuser@foo.bar",
   "auth": "metadata",
-  "customer": "edok",
+  "customer": "testgroup",
   "create":["test_type"],          
   "search":["test_type"],
   "roles": [
